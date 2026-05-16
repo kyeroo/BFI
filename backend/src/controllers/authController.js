@@ -1,46 +1,51 @@
-require("dotenv").config();
-const prisma = require("../lib/prisma");
+const prisma = require("../prisma");
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
   try {
 
-    const { name, email, password, role } = req.body;
+    const {
+      name,
+      email,
+      password,
+      role,
+    } = req.body;
 
-    const checkUser = await prisma.user.findUnique({
-      where: {
-        email
-      }
-    });
+    const userExist =
+      await prisma.user.findUnique({
+        where: { email },
+      });
 
-    if (checkUser) {
+    if (userExist) {
       return res.status(400).json({
-        message: "Email already exists"
+        message: "Email already used",
       });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword =
+      await bcrypt.hash(password, 10);
 
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-        role
-      }
-    });
+    const user =
+      await prisma.user.create({
+        data: {
+          name,
+          email,
+          password: hashedPassword,
+          role,
+        },
+      });
 
-    res.json({
+    res.status(201).json({
       message: "Register success",
-      user
+      user,
     });
 
   } catch (error) {
-    console.log(error);
 
     res.status(500).json({
-      message: "Server error"
+      message: error.message,
     });
   }
 };
@@ -48,58 +53,69 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
 
-    const { email, password } = req.body;
+    const {
+      email,
+      password,
+    } = req.body;
 
-    const user = await prisma.user.findUnique({
-      where: {
-        email
-      }
-    });
+    const user =
+      await prisma.user.findUnique({
+        where: { email },
+      });
 
     if (!user) {
       return res.status(404).json({
-        message: "User not found"
+        message: "User not found",
       });
     }
 
-    const isMatch = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isPasswordValid =
+      await bcrypt.compare(
+        password,
+        user.password
+      );
 
-    if (!isMatch) {
+    if (!isPasswordValid) {
       return res.status(400).json({
-        message: "Wrong password"
+        message: "Wrong password",
       });
     }
 
     const token = jwt.sign(
       {
         id: user.id,
-        role: user.role
+        role: user.role,
       },
-      process.env.JWT_SECRET,
+
+      "SECRET_KEY",
+
       {
-        expiresIn: "7d"
+        expiresIn: "7d",
       }
     );
 
     res.json({
       message: "Login success",
+
       token,
-      user
+
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
 
   } catch (error) {
-    console.log(error);
 
     res.status(500).json({
-      message: "Server error"
+      message: error.message,
     });
   }
 };
 
 module.exports = {
   register,
-  login
+  login,
 };

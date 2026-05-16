@@ -7,11 +7,143 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum RoleCategory {
+  TPSR
+  Petani
+  Horeca
+}
+
+enum ProductCategory {
+  BUAH
+  IKAN
+  KOMPOS
+  SOLAR
+}
+
+enum TrashStatus {
+  EMPTY
+  HALF
+  FULL
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESS
+  DONE
+  CANCELLED
+}
+
+enum PickupStatus {
+  REQUESTED
+  PICKED
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  role      String
+  id             Int             @id @default(autoincrement())
+  name           String
+  email          String          @unique
+  password       String
+  role           RoleCategory
+  products       Product[]
+  horecaOrders   Order[]         @relation("HorecaOrders")
+  sellerOrders   Order[]         @relation("SellerOrders")
+  pickupRequests PickupRequest[]
+  createdAt      DateTime        @default(now())
+}
+
+model Composter {
+  id Int @id @default(autoincrement())
+
+  temperature Float
+  humidity    Float
+  weight      Float
+
+  estimatedCompost  Float
+  estimatedDuration Int
+
+  createdAt DateTime @default(now())
+}
+
+model TrashBin {
+  id Int @id @default(autoincrement())
+
+  name String
+
+  latitude  Float
+  longitude Float
+
+  capacity Int
+
+  status TrashStatus
+
+  pickupRequests PickupRequest[]
+
+  createdAt DateTime @default(now())
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+
+  name String
+
+  category ProductCategory
+
+  grade String
+
+  stock Int
+  price Float
+
+  image String
+
+  sellerId Int
+  seller   User @relation(fields: [sellerId], references: [id])
+
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id Int @id @default(autoincrement())
+
+  horecaId Int
+  horeca   User @relation("HorecaOrders", fields: [horecaId], references: [id])
+
+  sellerId Int
+  seller   User @relation("SellerOrders", fields: [sellerId], references: [id])
+
+  totalPrice Float
+
+  status OrderStatus
+
+  createdAt DateTime @default(now())
+
+  items OrderItem[]
+}
+
+model OrderItem {
+  id Int @id @default(autoincrement())
+
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id])
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+
+  quantity Int
+  price    Float
+}
+
+model PickupRequest {
+  id Int @id @default(autoincrement())
+
+  horecaId Int
+  horeca   User @relation(fields: [horecaId], references: [id])
+
+  trashBinId Int
+  trashBin   TrashBin @relation(fields: [trashBinId], references: [id])
+
+  status PickupStatus
+
   createdAt DateTime @default(now())
 }

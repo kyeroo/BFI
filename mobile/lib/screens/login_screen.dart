@@ -24,7 +24,7 @@ class LoginScreen extends StatelessWidget {
 
           /// TOP LEAF
           Positioned(
-            top: -100,
+            top: -110,
             right: -250,
 
             child: Image.asset(
