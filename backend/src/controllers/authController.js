@@ -53,14 +53,11 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
 
-    const {
-      email,
-      password,
-    } = req.body;
+    const { name, password } = req.body;
 
     const user =
-      await prisma.user.findUnique({
-        where: { email },
+      await prisma.user.findFirst({
+        where: { name },
       });
 
     if (!user) {
