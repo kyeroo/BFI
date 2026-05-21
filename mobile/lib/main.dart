@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/screens/register_screen.dart';
 
 import 'core/theme.dart';
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
 
       theme: AppTheme.lightTheme,
 
-      home: SplashScreen(),
+      home: RegisterScreen(),
     );
   }
 }
