@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
-import 'tpsr_dashboard.dart';
+
+import 'register_screen.dart';
 
 import 'tpsr/tpsr_dashboard_screen.dart';
+
+
 
 final TextEditingController
     emailController =
@@ -461,19 +464,32 @@ class _LoginScreenState
 
                         const SizedBox(height: 3),
 
-                        const Text(
-                          "REGISTER",
+                        GestureDetector(
 
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight:
-                                FontWeight.bold,
-                            color:
-                                Color(0xFF58C531),
+                          onTap: () {
 
-                            decoration:
-                                TextDecoration
-                                    .underline,
+                            Navigator.push(
+
+                              context,
+
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    const RegisterScreen(),
+                              ),
+                            );
+                          },
+
+                          child: const Text(
+                            "REGISTER",
+
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF58C531),
+
+                              decoration:
+                                  TextDecoration.underline,
+                            ),
                           ),
                         ),
 
