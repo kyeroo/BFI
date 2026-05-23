@@ -388,14 +388,14 @@ class _LoginScreenState
                                 );
                               }
 
-                              else if (role == "PETANI") {
+                              else if (role == "PRODUSEN") {
 
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(
 
                                   const SnackBar(
                                     content: Text(
-                                      "Dashboard Petani belum dibuat",
+                                      "Dashboard Produsen belum dibuat",
                                     ),
                                   ),
                                 );

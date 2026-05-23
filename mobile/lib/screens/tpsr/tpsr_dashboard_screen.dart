@@ -1,7 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../login_screen.dart';
+import '../../services/auth_service.dart';
 
-class TpsrDashboardScreen extends StatelessWidget {
-  const TpsrDashboardScreen({super.key});
+class TpsrDashboardScreen
+    extends StatefulWidget {
+
+  const TpsrDashboardScreen({
+    super.key,
+  });
+
+  @override
+  State<TpsrDashboardScreen>
+      createState() =>
+          _TpsrDashboardScreenState();
+}
+
+class _TpsrDashboardScreenState
+    extends State<TpsrDashboardScreen> {
+
+  String name = "User";
+  String role = "";
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadUser();
+  }
+
+  Future<void> loadUser()
+  async {
+
+    final prefs =
+        await SharedPreferences
+            .getInstance();
+
+    setState(() {
+
+      name =
+          prefs.getString("name") ??
+          "User";
+
+      role =
+          prefs.getString("role") ??
+          "TPSR";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +66,7 @@ class TpsrDashboardScreen extends StatelessWidget {
 
                   const CircleAvatar(
                     radius: 26,
+
                     backgroundImage: AssetImage(
                       "assets/images/profile.jpg",
                     ),
@@ -32,10 +78,11 @@ class TpsrDashboardScreen extends StatelessWidget {
                     crossAxisAlignment:
                         CrossAxisAlignment.start,
 
-                    children: const [
+                    children: [
 
                       Text(
-                        "Welcome AGS777",
+                        "Welcome $name",
+
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight:
@@ -46,13 +93,61 @@ class TpsrDashboardScreen extends StatelessWidget {
                       SizedBox(height: 2),
 
                       Text(
-                        "TPSR",
+                        role.toUpperCase(),
+
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 12,
                         ),
                       ),
                     ],
+                  ),
+
+                  const Spacer(),
+
+                  GestureDetector(
+
+                    onTap: () async {
+
+                      await AuthService.logout();
+
+                      Navigator.pushAndRemoveUntil(
+
+                        context,
+
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              const LoginScreen(),
+                        ),
+
+                        (route) => false,
+                      );
+                    },
+
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+
+                        borderRadius:
+                            BorderRadius.circular(14),
+
+                        boxShadow: [
+
+                          BoxShadow(
+                            blurRadius: 8,
+                            offset: Offset(0, 3),
+                            color: Colors.black12,
+                          ),
+                        ],
+                      ),
+
+                      child: const Icon(
+                        Icons.logout_rounded,
+                        color: Color(0xFF58C531),
+                      ),
+                    ),
                   ),
                 ],
               ),

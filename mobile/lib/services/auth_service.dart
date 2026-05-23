@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart'
     as http;
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class AuthService {
 
   static const String baseUrl =
@@ -34,11 +36,41 @@ class AuthService {
 
     if (response.statusCode == 200) {
 
-      return jsonDecode(
-        response.body,
+      final data =
+          jsonDecode(response.body);
+
+      final prefs =
+          await SharedPreferences
+              .getInstance();
+
+      await prefs.setString(
+        "token",
+        data["token"],
       );
+
+      await prefs.setString(
+        "name",
+        data["user"]["name"],
+      );
+
+      await prefs.setString(
+        "role",
+        data["user"]["role"],
+      );
+
+      return data;
     }
 
     return null;
+  }
+
+  static Future<void> logout()
+  async {
+
+    final prefs =
+        await SharedPreferences
+            .getInstance();
+
+    await prefs.remove("token");
   }
 }
