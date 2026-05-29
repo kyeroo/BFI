@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/screens/login_screen.dart';
+import 'package:mobile/screens/produsen/produsen_buyTpsr_screen.dart';
+import 'package:mobile/screens/produsen/produsen_sellCrops_screen.dart';
 import 'package:mobile/screens/register_screen.dart';
 import 'package:mobile/screens/tpsr/tpsr_dashboard_screen.dart';
 import 'package:mobile/screens/tpsr_dashboard.dart';
+import 'package:mobile/screens/produsen/produsen_dashboard_screen.dart';
 
 import 'core/theme.dart';
 
@@ -23,7 +26,7 @@ class MyApp extends StatelessWidget {
 
       theme: AppTheme.lightTheme,
 
-      home: TpsrDashboardScreen(),
+      home: ProdusenBuyTpsrScreen(),
     );
   }
 }
