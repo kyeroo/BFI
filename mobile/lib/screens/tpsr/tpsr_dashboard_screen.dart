@@ -22,6 +22,8 @@ class _TpsrDashboardScreenState
   String name = "User";
   String role = "";
 
+  String selectedPlastic = "PE";
+
   @override
   void initState() {
     super.initState();
@@ -548,36 +550,44 @@ class _TpsrDashboardScreenState
     );
   }
 
-  Widget plasticButton(String text) {
+Widget plasticButton(String text) {
+  final isSelected = selectedPlastic == text;
 
-    return Container(
+  return GestureDetector(
+    onTap: () {
+      setState(() {
+        selectedPlastic = text;
+      });
+    },
+    child: Container(
       height: 46,
-
       decoration: BoxDecoration(
-        color: Colors.white,
-
-        borderRadius:
-            BorderRadius.circular(12),
-
+        color: isSelected ? const Color(0xFF58C531) : Colors.white,
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             blurRadius: 4,
             color: Colors.black12,
           ),
         ],
+        border: Border.all(
+          color: isSelected
+              ? const Color(0xFF58C531)
+              : Colors.black12,
+        ),
       ),
-
       child: Center(
         child: Text(
           text,
-          style: const TextStyle(
-            fontWeight:
-                FontWeight.bold,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: isSelected ? Colors.white : Colors.black,
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget processRow(
     String title,
