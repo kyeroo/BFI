@@ -29,7 +29,7 @@ class AuthService {
 
       body: jsonEncode({
 
-        "email": email,
+        "name": email,
         "password": password,
       }),
     );
