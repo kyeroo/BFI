@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../login_screen.dart';
+import '../../services/auth_service.dart';
 import 'produsen_dashboard_screen.dart';
 import 'produsen_buyTpsr_screen.dart';
 
@@ -203,6 +204,55 @@ class _SellCropsScreenState
 
                             color:
                                 Colors.white,
+                          ),
+                        ),
+
+                        const SizedBox(
+                          width: 10,
+                        ),
+
+                        GestureDetector(
+
+                          onTap: () async {
+
+                            await AuthService.logout();
+
+                            Navigator.pushAndRemoveUntil(
+
+                              context,
+
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    const LoginScreen(),
+                              ),
+
+                              (route) => false,
+                            );
+                          },
+
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+
+                              borderRadius:
+                                  BorderRadius.circular(14),
+
+                              boxShadow: [
+
+                                BoxShadow(
+                                  blurRadius: 8,
+                                  offset: Offset(0, 3),
+                                  color: Colors.black12,
+                                ),
+                              ],
+                            ),
+
+                            child: const Icon(
+                              Icons.logout_rounded,
+                              color: Color(0xFF06C167),
+                            ),
                           ),
                         ),
                       ],

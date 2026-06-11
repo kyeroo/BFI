@@ -55,54 +55,63 @@ const login = async (req, res) => {
 
     const { name, password } = req.body;
 
-    const user =
-      await prisma.user.findFirst({
-        where: { name },
-      });
+    console.log("DEBUG: Login attempt with name:", name);
 
-    if (!user) {
-      return res.status(404).json({
-        message: "User not found",
-      });
-    }
+    try {
+      const user =
+        await prisma.user.findFirst({
+          where: { name },
+        });
 
-    const isPasswordValid =
-      await bcrypt.compare(
-        password,
-        user.password
+      console.log("DEBUG: User found:", user);
+
+      if (!user) {
+        return res.status(404).json({
+          message: "User not found",
+        });
+      }
+
+      const isPasswordValid =
+        await bcrypt.compare(
+          password,
+          user.password
+        );
+
+      if (!isPasswordValid) {
+        return res.status(400).json({
+          message: "Wrong password",
+        });
+      }
+
+      const token = jwt.sign(
+        {
+          id: user.id,
+          role: user.role,
+        },
+
+        "SECRET_KEY",
+
+        {
+          expiresIn: "7d",
+        }
       );
 
-    if (!isPasswordValid) {
-      return res.status(400).json({
-        message: "Wrong password",
+      res.json({
+        message: "Login success",
+
+        token,
+
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        },
       });
+    } catch (dbError) {
+      console.log("DEBUG: Database error:", dbError.message);
+      throw dbError;
     }
-
-    const token = jwt.sign(
-      {
-        id: user.id,
-        role: user.role,
-      },
-
-      "SECRET_KEY",
-
-      {
-        expiresIn: "7d",
-      }
-    );
-
-    res.json({
-      message: "Login success",
-
-      token,
-
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
-    });
 
   } catch (error) {
 

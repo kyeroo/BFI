@@ -376,6 +376,8 @@ class _LoginScreenState
                               final role =
                                   result["user"]["role"];
 
+                              print("DEBUG: Role received = '$role'");
+
                               if (role == "TPSR") {
 
                                 Navigator.pushReplacement(
@@ -388,20 +390,19 @@ class _LoginScreenState
                                 );
                               }
 
-                              else if (role == "PRODUSEN") {
+                              else if (role == "Produsen") {
 
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(
+                                Navigator.pushReplacement(
+                                  context,
 
-                                  const SnackBar(
-                                    content: Text(
-                                      "Dashboard Produsen belum dibuat",
-                                    ),
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        const ProdusenDashboardScreen(),
                                   ),
                                 );
                               }
 
-                              else if (role == "HORECA") {
+                              else if (role == "Horeca") {
 
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(

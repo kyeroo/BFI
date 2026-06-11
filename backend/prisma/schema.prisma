@@ -40,7 +40,7 @@ enum PickupStatus {
 
 model User {
   id             Int             @id @default(autoincrement())
-  name           String
+  name           String          @unique
   email          String          @unique
   password       String
   role           RoleCategory
