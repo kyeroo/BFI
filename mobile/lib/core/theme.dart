@@ -52,7 +52,7 @@ class AppTheme {
         ),
 
         minimumSize:
-            Size(double.infinity, 55),
+             const Size(0, 55),
       ),
     ),
   );

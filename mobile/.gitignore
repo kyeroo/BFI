@@ -48,3 +48,8 @@ android/app/build/
 
 .packages
 .idea/
+
+# Flutter generated desktop files
+macos/Flutter/GeneratedPluginRegistrant.swift
+windows/flutter/generated_plugin_registrant.cc
+windows/flutter/generated_plugins.cmake
